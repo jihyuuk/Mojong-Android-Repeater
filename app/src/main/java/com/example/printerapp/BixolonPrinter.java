@@ -34,6 +34,8 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
 
     private Context context = null;
 
+    public static boolean CONNECTION;
+
     private MainActivity mainActivity;
     private BXLConfigLoader bxlConfigLoader;
     private POSPrinter posPrinter;
@@ -73,7 +75,7 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
                 posPrinter.claim(5000);
                 posPrinter.setDeviceEnabled(true);
                 posPrinter.setAsyncMode(true);
-
+                CONNECTION = true;
                 mainActivity.updateTvBT("연결성공");
             } catch (JposException e) {
                 mainActivity.updateTvBT("연결실패");
@@ -89,6 +91,7 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
             if (posPrinter.getClaimed()) {
                 posPrinter.setDeviceEnabled(false);
                 posPrinter.release();
+                CONNECTION = false;
             }
         } catch (JposException e) {
             e.printStackTrace();
@@ -174,7 +177,6 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
     @Override
     public void outputCompleteOccurred(OutputCompleteEvent outputCompleteEvent) {
         Log.d("myTag", "프린터기 완료 이벤트 " + outputCompleteEvent.getOutputID());
-
     }
 
     //프린터 상태변경 리스너

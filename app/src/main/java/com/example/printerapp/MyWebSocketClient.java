@@ -30,6 +30,12 @@ public class MyWebSocketClient extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         Log.i("myLog","서버로 부터 메세지 수신 : "+ message);
+
+        if(!BixolonPrinter.CONNECTION){
+            send("프린터기 연결안됨");
+            return;
+        }
+
         bxlPrinter.print(message);
     }
 
