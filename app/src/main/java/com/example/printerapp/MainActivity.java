@@ -84,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
     //토스트 띄우기
     public void showToast(String message, int length){
-        Toast.makeText(getApplicationContext(),message,length).show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(),message,length).show();
+            }
+        });
     }
 
     //블루투스 연결상태 textView

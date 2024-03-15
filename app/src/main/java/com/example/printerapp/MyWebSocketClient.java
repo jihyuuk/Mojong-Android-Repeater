@@ -23,7 +23,7 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        mainActivity.updateTvBT("연결성공");
+        mainActivity.updateTvSocket("연결성공");
         Log.i("myLog","서버와 연결됨");
     }
 
