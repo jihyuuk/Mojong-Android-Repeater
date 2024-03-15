@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //bxlPrinter.samplePrint(et_message.getText().toString());
+                bxlPrinter.samplePrint(et_message.getText().toString());
             }
         });
     }

@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.bxl.BXLConst;
 import com.bxl.config.editor.BXLConfigLoader;
+import com.example.printerapp.dto.SaleDTO;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,8 +35,9 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
     private Context context = null;
 
     private MainActivity mainActivity;
-    private BXLConfigLoader bxlConfigLoader = null;
-    private POSPrinter posPrinter = null;
+    private BXLConfigLoader bxlConfigLoader;
+    private POSPrinter posPrinter;
+    private Gson gson;
 
     //생성자
     public BixolonPrinter(Context context, MainActivity mainActivity) {
@@ -48,6 +51,7 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
         posPrinter.addStatusUpdateListener(this);
 
         bxlConfigLoader = new BXLConfigLoader(this.context);
+        gson = new Gson();
 
         //설정 파일 불러오기
         loadFile();
@@ -92,49 +96,20 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
     }
 
     //출력
-    public void print(String str) {
+    public void print(String message) {
         try {
-
-//            String ESCAPE = new String(new byte[]{0x1b, 0x7c});
-//
-//            StringBuilder sb = new StringBuilder();
-//
-//            sb.append(ESCAPE).append("4C").append(ESCAPE).append("cA")
-//                    .append("판매내역\n\n")
-//                    .append(ESCAPE).append("N")
-//                    .append("상호:(주)그린아그로\n")
-//                    .append("대표:황용순\n")
-//                    .append("주소:인천시 계양구 벌말로 596-3\n")
-//                    .append("전화번호:032-132-1423\n")
-//                    .append("일시:2024-03-14 20:17\n\n")
-//                    .append(ESCAPE).append("cA")
-//                    .append("--------------------------------")
-//                    .append(ESCAPE).append("bC")
-//                    .append("상 품 명           수 량   금 액\n")
-//                    .append(ESCAPE).append("!bC")
-//                    .append("--------------------------------")
-//                    .append(ESCAPE).append("N").append("\n")
-//                    .append("가나다라마바사아자  999  200,000\n")
-//                    .append("올복합               50   25,000\n")
-//                    .append("오이고추             10    5,000\n")
-//                    .append("대추방울(빨강)       10   10,000\n")
-//                    .append("애호박               3    1,500\n\n")
-//                    .append("--------------------------------")
-//                    .append("합 계 금 액            241,500원")
-//                    .append("할 인 금 액             -1,500원")
-//                    .append("--------------------------------")
-//                    .append(ESCAPE).append("bC")
-//                    .append("합 계 금 액            240,000원")
-//                    .append(ESCAPE).append("!bC");
-//
-//
-//
-//            posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, sb.toString() + "\n\n\n\n\n");
-
+            //json을 객체로 변환
+            SaleDTO dto = gson.fromJson(message, SaleDTO.class);
+            //빌더생성
             PrintBuilder pb = new PrintBuilder();
-            posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, pb.toString()+"\n\n\n\n\n");
+            //빌딩
+            String res = pb.build(dto);
 
-        } catch (JposException e) {
+            Log.d("myTag", res);
+            //출력
+            posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT,res);
+
+        } catch (Exception e) {
             Toast.makeText(this.context, "출력 중 에러발생", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
