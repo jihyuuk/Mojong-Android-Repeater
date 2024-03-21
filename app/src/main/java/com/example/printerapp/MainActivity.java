@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
     //프린터기 연결
     private void connectPrinter() {
-        updateTvBT("연결중...");
         bxlPrinter.connect();
     }
 
