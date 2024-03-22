@@ -1,14 +1,14 @@
 package com.example.printerapp;
 
-import com.example.printerapp.dto.SaleDTO;
-import com.example.printerapp.dto.SaleItemDTO;
+import com.example.printerapp.dto.Sale;
+import com.example.printerapp.dto.SaleItem;
 
 import java.text.DecimalFormat;
 
 public class PrintBuilder {
 
     private StringBuilder sb;
-    private SaleDTO saleDTO;
+    private Sale sale;
     private DecimalFormat decimalFormat;
 
     private final String ESCAPE;
@@ -21,8 +21,8 @@ public class PrintBuilder {
         WIDTH = 32;
     }
 
-    public String build(SaleDTO saleDTO){
-        this.saleDTO = saleDTO;
+    public String build(Sale sale){
+        this.sale = sale;
 
         appendTitle();
         appendHeader();
@@ -49,8 +49,9 @@ public class PrintBuilder {
         append("상호:(주)그린아그로\n");
         append("대표:황용순\n");
         append("주소:인천시 계양구 벌말로 596-3\n");
-        append("전화번호:032-132-1423\n");
-        append("일시:2024-03-14 20:17\n\n");
+        append("전화번호:032-544-8228\n");
+        append("판매변호:#"+sale.getId()+"\n");
+        append("일시:"+sale.getTime()+"\n\n");
     }
 
     private void appendTableHeader() {
@@ -61,7 +62,7 @@ public class PrintBuilder {
 
     private void appendTableBody() {
 
-        for (SaleItemDTO item : saleDTO.getItems()) {
+        for (SaleItem item : sale.getItems()) {
 
             //상품명
             appendColName(item);
@@ -80,12 +81,12 @@ public class PrintBuilder {
 
     private void appendDiscount() {
         //할인 x
-        if(saleDTO.getSalePrice() <= 0) return;
+        if(sale.getSalePrice() <= 0) return;
 
         //합계금액
-        String totalPrice = decimalFormat.format(saleDTO.getTotalPrice());
+        String totalPrice = decimalFormat.format(sale.getTotalPrice());
         //할인금액
-        String salePrice = "-"+decimalFormat.format(saleDTO.getSalePrice());
+        String salePrice = "-"+decimalFormat.format(sale.getSalePrice());
 
         appendLine();
         append("합 계 금 액");
@@ -101,14 +102,14 @@ public class PrintBuilder {
         appendLine();
 
         //결제금액
-        String finalPrice = decimalFormat.format(saleDTO.getFinalPrice());
+        String finalPrice = decimalFormat.format(sale.getFinalPrice());
 
         appendBold("결 제 금 액");
         appendBlank(WIDTH-13-finalPrice.length());
         appendBold(finalPrice+"원\n\n\n\n\n");
     }
 
-    private void appendColName(SaleItemDTO item) {
+    private void appendColName(SaleItem item) {
         String name = item.getName();
         int nameSize = 0;
         for (int i = 0; i < name.length(); i++) {
@@ -125,7 +126,7 @@ public class PrintBuilder {
         }
     }
 
-    private void appendColQuantity(SaleItemDTO item) {
+    private void appendColQuantity(SaleItem item) {
         String quantity = item.getQuantity()+"";
         if(quantity.length() < 3){
             appendBlank(3-quantity.length());
@@ -133,7 +134,7 @@ public class PrintBuilder {
         append(quantity);
     }
 
-    private void appendColTotal(SaleItemDTO item) {
+    private void appendColTotal(SaleItem item) {
         String total = decimalFormat.format(item.getPrice()* item.getQuantity());
         if(total.length() < 7){
             appendBlank(7-total.length());

@@ -1,6 +1,6 @@
 package com.example.printerapp.dto;
 
-public class SaleItemDTO {
+public class SaleItem {
 
     //상품이름,단가,수량,총합계
     private String name;

@@ -5,14 +5,11 @@ import static com.bxl.config.editor.BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER;
 import static com.bxl.config.editor.BXLConfigLoader.PRODUCT_NAME_SPP_R215;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bxl.BXLConst;
 import com.bxl.config.editor.BXLConfigLoader;
-import com.example.printerapp.dto.SaleDTO;
+import com.example.printerapp.dto.Sale;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -98,7 +95,7 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
     public void print(String message) {
         try {
             //json을 객체로 변환
-            SaleDTO dto = gson.fromJson(message, SaleDTO.class);
+            Sale dto = gson.fromJson(message, Sale.class);
             //빌더생성
             PrintBuilder pb = new PrintBuilder();
             //빌딩
