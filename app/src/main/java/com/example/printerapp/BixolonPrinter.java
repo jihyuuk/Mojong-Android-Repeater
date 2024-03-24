@@ -35,6 +35,7 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
     private BXLConfigLoader bxlConfigLoader;
     private POSPrinter posPrinter;
     private Gson gson;
+    private MyWebSocketClient myWebSocketClient;
 
     //생성자
     public BixolonPrinter(Context context, MainActivity mainActivity) {
@@ -60,6 +61,9 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
         printerOpen();
     }
 
+    public void setMyWebSocketClient(MyWebSocketClient myWebSocketClient) {
+        this.myWebSocketClient = myWebSocketClient;
+    }
 
     //연결시도
     public boolean connect() {
@@ -178,7 +182,8 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
         //전원 꺼졌을때
         if (statusUpdateEvent.getStatus() == JposConst.JPOS_SUE_POWER_OFF_OFFLINE) {
             //연결해지
-            mainActivity.updateTvBT("연결끊김");
+            mainActivity.updateTvBT("전원 꺼짐");
+            if(myWebSocketClient != null) myWebSocketClient.close();
         }
 
     }

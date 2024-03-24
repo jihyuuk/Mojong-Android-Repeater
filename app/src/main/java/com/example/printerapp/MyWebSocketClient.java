@@ -35,7 +35,7 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        mainActivity.updateTvSocket("연결끊김");
+        mainActivity.updateTvSocket("연결이 해지되었음");
         mainActivity.showToast("서버와의 연결이 끊겼습니다.", Toast.LENGTH_LONG);
 
         Log.i("myLog","서버연결 닫힘");

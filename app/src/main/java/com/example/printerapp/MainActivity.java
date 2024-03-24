@@ -14,22 +14,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 
-import jpos.JposException;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    //프린터
-    private BixolonPrinter bxlPrinter = null;
-
     //블루투스 관련
     private BluetoothAdapter btAdapter;
+
+    //프린터
+    private BixolonPrinter bxlPrinter;
     //웹소켓 관련
     private MyWebSocketClient myWebSocketClient;
-
 
     //전역변수
     public static final int BT_REQUEST_ENABLE = 1;
@@ -73,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv_bt_state.setText("");
-                tv_socket_state.setText("");
+
                 connectAll();
             }
         });
@@ -102,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tv_bt_state.setText("블루투스 : "+text);
+                tv_bt_state.setText("프린터 : "+text);
             }
         });
     }
@@ -122,12 +118,11 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"프린터 및 서버 연결 중...",Toast.LENGTH_SHORT).show();
 
         CompletableFuture.runAsync(() -> {
-
             //프린터 연결
             boolean printerConnected = bxlPrinter.connect();
             //서버 연결
+            updateTvSocket("");
             if(printerConnected) connectSocket();
-
         });
 
     }
@@ -138,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         updateTvSocket("연결중...");
         try {
             myWebSocketClient = new MyWebSocketClient(this, bxlPrinter);
+            bxlPrinter.setMyWebSocketClient(myWebSocketClient);
             myWebSocketClient.connect();
         } catch (Exception e) {
             e.printStackTrace();
