@@ -15,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URISyntaxException;
+import java.util.concurrent.CompletableFuture;
+
+import jpos.JposException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tv_bt_state.setText("");
+                tv_socket_state.setText("");
                 connectAll();
             }
         });
@@ -115,15 +120,18 @@ public class MainActivity extends AppCompatActivity {
     //프린터 서버 연결
     private void connectAll(){
         Toast.makeText(getApplicationContext(),"프린터 및 서버 연결 중...",Toast.LENGTH_SHORT).show();
-        connectPrinter();
-        connectSocket();
+
+        CompletableFuture.runAsync(() -> {
+
+            //프린터 연결
+            boolean printerConnected = bxlPrinter.connect();
+            //서버 연결
+            if(printerConnected) connectSocket();
+
+        });
+
     }
 
-
-    //프린터기 연결
-    private void connectPrinter() {
-        bxlPrinter.connect();
-    }
 
     //서버와 웹소켓 연결
     private void connectSocket() {

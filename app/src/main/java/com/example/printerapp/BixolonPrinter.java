@@ -62,9 +62,7 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
 
 
     //연결시도
-    public void connect() {
-
-        CompletableFuture.runAsync(() -> {
+    public boolean connect() {
             try {
                 disConnect();
                 mainActivity.updateTvBT("연결중...");
@@ -72,12 +70,12 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
                 posPrinter.setDeviceEnabled(true);
                 posPrinter.setAsyncMode(true);
                 mainActivity.updateTvBT("연결성공");
+                return true;
             } catch (JposException e) {
                 mainActivity.updateTvBT("연결실패");
                 e.printStackTrace();
+                return false;
             }
-        });
-
     }
 
     //연결끊기
