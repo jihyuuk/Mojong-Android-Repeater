@@ -1,6 +1,7 @@
 package com.example.printerapp;
 
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -8,18 +9,23 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.Collections;
 
 public class MyWebSocketClient extends WebSocketClient {
 
     private MainActivity mainActivity;
     private BixolonPrinter bxlPrinter;
 
-    public MyWebSocketClient(MainActivity mainActivity, BixolonPrinter bxlPrinter) throws URISyntaxException{
-        super(new URI("ws://192.168.0.3:8080/ws"));
+
+    public MyWebSocketClient(MainActivity mainActivity, BixolonPrinter bxlPrinter, String url, String token) throws Exception{
+
+        super(new URI(url), Collections.singletonMap("Authorization", "Bearer " + token));
+
         this.mainActivity = mainActivity;
         this.bxlPrinter = bxlPrinter;
     }
+
+
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {

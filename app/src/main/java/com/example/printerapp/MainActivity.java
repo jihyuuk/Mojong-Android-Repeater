@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 connectAll();
             }
         });
@@ -132,7 +132,16 @@ public class MainActivity extends AppCompatActivity {
     private void connectSocket() {
         updateTvSocket("연결중...");
         try {
-            myWebSocketClient = new MyWebSocketClient(this, bxlPrinter);
+            //서버 url, 토큰정보 가져오기
+            Properties properties = new Properties();
+            properties.load(getApplicationContext().getResources().openRawResource(R.raw.config));
+            String url = properties.getProperty("server_address");
+            String token = properties.getProperty("token");
+
+            Log.d("myTag","url "+ url);
+            Log.d("myTag","token "+ token);
+
+            myWebSocketClient = new MyWebSocketClient(this, bxlPrinter, url, token);
             bxlPrinter.setMyWebSocketClient(myWebSocketClient);
             myWebSocketClient.connect();
         } catch (Exception e) {
