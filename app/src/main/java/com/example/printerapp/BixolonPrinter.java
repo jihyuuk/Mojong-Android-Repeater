@@ -27,7 +27,7 @@ import jpos.events.OutputCompleteListener;
 import jpos.events.StatusUpdateEvent;
 import jpos.events.StatusUpdateListener;
 
-public class BixolonPrinter implements ErrorListener, OutputCompleteListener, StatusUpdateListener {
+public class BixolonPrinter implements ErrorListener, StatusUpdateListener {
 
     private Context context = null;
 
@@ -45,7 +45,6 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
 
         posPrinter = new POSPrinter(this.context);
         posPrinter.addErrorListener(this);
-        posPrinter.addOutputCompleteListener(this);
         posPrinter.addStatusUpdateListener(this);
 
         bxlConfigLoader = new BXLConfigLoader(this.context);
@@ -166,12 +165,6 @@ public class BixolonPrinter implements ErrorListener, OutputCompleteListener, St
     @Override
     public void errorOccurred(ErrorEvent errorEvent) {
         Log.d("myTag", "프린터기 에러 이벤트 " + errorEvent.getErrorCode());
-    }
-
-    //프린터 완료 리스너
-    @Override
-    public void outputCompleteOccurred(OutputCompleteEvent outputCompleteEvent) {
-        Log.d("myTag", "프린터기 완료 이벤트 " + outputCompleteEvent.getOutputID());
     }
 
     //프린터 상태변경 리스너
