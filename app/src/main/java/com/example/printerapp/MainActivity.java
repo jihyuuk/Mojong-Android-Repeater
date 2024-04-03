@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             //서버 url, 토큰정보 가져오기
             Properties properties = new Properties();
-            properties.load(getApplicationContext().getResources().openRawResource(R.raw.config));
+            properties.load(getApplicationContext().getResources().openRawResource(R.raw.serverConfig));
             String url = properties.getProperty("server_address");
             String token = properties.getProperty("token");
 
