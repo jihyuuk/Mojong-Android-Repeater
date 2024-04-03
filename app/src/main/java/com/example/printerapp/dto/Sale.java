@@ -16,7 +16,7 @@ public class Sale {
     //최종금액
     private int finalPrice;
     //판매시간
-    private String time;
+    private String date;
 
 
     public List<SaleItem> getItems() {
@@ -39,7 +39,7 @@ public class Sale {
         return id;
     }
 
-    public String getTime() {
-        return time;
+    public String getDate() {
+        return date;
     }
 }
