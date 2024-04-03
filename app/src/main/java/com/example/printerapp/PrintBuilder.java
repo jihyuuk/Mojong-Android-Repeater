@@ -47,11 +47,10 @@ public class PrintBuilder {
 
     private void appendHeader() {
         append("상호:(주)그린아그로\n");
-        append("대표:황용순\n");
+        //append("대표:황용순\n");
         append("주소:인천시 계양구 벌말로 596-3\n");
-        append("전화번호:032-544-8228\n");
-        append("판매변호:#"+sale.getId()+"\n");
-        append("일시:"+sale.getTime()+"\n\n");
+        append("전화번호:032-544-9559\n");
+        append("판매:#"+sale.getId()+" "+sale.getDate()+"\n\n");
     }
 
     private void appendTableHeader() {
@@ -135,7 +134,7 @@ public class PrintBuilder {
     }
 
     private void appendColTotal(SaleItem item) {
-        String total = decimalFormat.format(item.getPrice()* item.getQuantity());
+        String total = decimalFormat.format(item.getTotal());
         if(total.length() < 7){
             appendBlank(7-total.length());
         }
